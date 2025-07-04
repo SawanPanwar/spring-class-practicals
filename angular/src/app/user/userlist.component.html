@@ -7,6 +7,11 @@
                 [(ngModel)]="form.searchParams.firstName" /> &nbsp;
             <label><b>DOB : </b></label>
             <input type="date" name="dob" [(ngModel)]="form.searchParams.dob" /> &nbsp;
+            <label><b>Role : </b></label>
+            <select name="id" [(ngModel)]="form.searchParams.roleId">
+                <option [ngValue]="" value="undefined">{{'------Select User-------' }}</option>
+                <option *ngFor="let obj of form.preload" [value]="obj.key">{{obj.value}}</option>
+            </select> &nbsp;
             <button (click)="search()">search</button>
         </td>
     </tr>
@@ -27,7 +32,7 @@
     </tr>
     <tr *ngFor="let m of form.list; let i = index">
         <td style="text-align: center;">
-            <input type="checkbox" />
+            <input type="checkbox" (change)="onCheckboxChange(m.id)" />
         </td>
         <td style="text-align: center;">{{(form.pageNo*5)+i+ 1}}</td>
         <td> <img src="http://localhost:8080/User/profilePic/{{m.id}}" height="55px" width="80px"></td>
@@ -37,7 +42,7 @@
         <td style="text-align: center;">{{m.password}}</td>
         <td style="text-align: center;">{{m.dob | date: 'dd-MM-yyyy'}}</td>
         <td style="text-align: center;">{{m.roleName}}</td>
-        <td style="text-align: center;"> <a href="#" style="color: blue;">edit
+        <td style="text-align: center;"> <a (click)="edit( '/user/' +  m.id)" style="color: blue;">edit
             </a></td>
     </tr>
 </table>
@@ -47,7 +52,7 @@
         <td style="width: 25%"><button [disabled]="form.pageNo == 0" (click)="previous()">previous</button></td>
         <td align="center" style="width: 25%"><a href="/user"><button>add</button></a>
         </td>
-        <td align="center" style="width: 25%"><button>delete</button>
+        <td align="center" style="width: 25%"><button (click)="delete()">delete</button>
         </td>
         <td style="width: 25%" align="right"><button [disabled]="form.list.length < 5" (click)="next()">next</button>
         </td>
